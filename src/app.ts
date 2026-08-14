@@ -4,7 +4,8 @@ import helmet from "helmet";
 import { pinoHttp } from "pino-http";
 import { logger } from "./utils/logger.js";
 import { errorHandler } from "./middleware/errorHandler.js";
-import authRoutes from "./routes/auth.routes.js";
+import authRoutes from './routes/auth.routes.js';
+import { customerRoutes } from './routes/customer.routes.js';
 
 const app = express();
 
@@ -28,6 +29,7 @@ app.get("/health", (_req, res) => {
 });
 
 app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/customers", customerRoutes);
 
 // Register global error handler (must be last)
 app.use(errorHandler);

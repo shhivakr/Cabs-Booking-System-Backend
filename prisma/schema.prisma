@@ -15,6 +15,7 @@ enum Role {
   ADMIN
   DISPATCHER
   ACCOUNTANT
+  CUSTOMER
 }
 
 enum UserStatus {
@@ -115,6 +116,7 @@ model User {
   auditLogs     AuditLog[]
   settings      Setting[]      @relation("UpdatedBy")
   refreshTokens RefreshToken[]
+  customer      Customer?
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
@@ -140,7 +142,7 @@ model Customer {
   customerCode           String         @unique // CUST-XXX
   name                   String
   phone                  String         @unique
-  email                  String
+  email                  String         @unique
   type                   CustomerType   @default(RETAIL)
   status                 CustomerStatus @default(ACTIVE)
   companyName            String?
@@ -153,12 +155,17 @@ model Customer {
   preferredContactMethod String?
   notes                  String?        @db.Text
 
+  userId String? @unique @db.Uuid
+  user   User?   @relation(fields: [userId], references: [id])
+
   bookings Booking[]
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
 
+  @@index([type, status])
+  @@index([city])
   @@map("customers")
 }
 

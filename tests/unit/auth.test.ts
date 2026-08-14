@@ -50,6 +50,7 @@ describe("Auth Endpoints", () => {
       email: testUserEmail,
       password: testUserPassword,
     });
+    if (res.status !== 200) console.log("LOGIN 500 BODY:", res.body);
     expect(res.status).toBe(200);
     expect(res.body.data).toHaveProperty("accessToken");
     expect(res.body.data).toHaveProperty("refreshToken");
