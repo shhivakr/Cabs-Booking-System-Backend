@@ -24,6 +24,11 @@
       "key": "refreshToken",
       "value": "",
       "type": "string"
+    },
+    {
+      "key": "adminEmail",
+      "value": "admin@taxicrm.local",
+      "type": "string"
     }
   ],
   "item": [
@@ -57,7 +62,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"email\": \"admin@taxicrm.local\",\n  \"password\": \"SuperSecretAdminPassword1!\"\n}"
+              "raw": "{\n  \"email\": \"{{adminEmail}}\",\n  \"password\": \"SuperSecretAdminPassword1!\"\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/auth/login",

@@ -1,9 +1,8 @@
-import { PrismaClient, CustomerType, LicenseType, VehicleCategory, TripType, PaymentStatus, BookingStatus, BookingSource, Role } from '@prisma/client';
+import { CustomerType, LicenseType, VehicleCategory, TripType, PaymentStatus, BookingStatus, BookingSource, Role } from '@prisma/client';
 import bcrypt from "bcrypt";
 import { env } from "../src/config/env.js";
 import { generateBookingId, generateCustomerId, generateDriverId, generateVehicleId } from '../src/utils/idGenerator.js';
-
-const prisma = new PrismaClient();
+import { prisma } from "../src/config/database.js";
 
 async function main() {
   console.log('Clearing database...');
