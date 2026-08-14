@@ -5,31 +5,11 @@
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
-    {
-      "key": "baseUrl",
-      "value": "http://localhost:5000/api/v1",
-      "type": "string"
-    },
-    {
-      "key": "hostUrl",
-      "value": "http://localhost:5000",
-      "type": "string"
-    },
-    {
-      "key": "accessToken",
-      "value": "",
-      "type": "string"
-    },
-    {
-      "key": "refreshToken",
-      "value": "",
-      "type": "string"
-    },
-    {
-      "key": "adminEmail",
-      "value": "admin@taxicrm.local",
-      "type": "string"
-    }
+    { "key": "baseUrl", "value": "http://localhost:5000/api/v1", "type": "string" },
+    { "key": "hostUrl", "value": "http://localhost:5000", "type": "string" },
+    { "key": "accessToken", "value": "", "type": "string" },
+    { "key": "refreshToken", "value": "", "type": "string" },
+    { "key": "adminEmail", "value": "admin@taxicrm.local", "type": "string" }
   ],
   "item": [
     {
@@ -37,136 +17,39 @@
       "item": [
         {
           "name": "Login",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "var jsonData = pm.response.json();",
-                  "if (jsonData.status === 'success' && jsonData.data) {",
-                  "    pm.collectionVariables.set('accessToken', jsonData.data.accessToken);",
-                  "    pm.collectionVariables.set('refreshToken', jsonData.data.refreshToken);",
-                  "}"
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
+          "event": [{ "listen": "test", "script": { "exec": ["var jsonData = pm.response.json();","if (jsonData.status === 'success' && jsonData.data) {","    pm.collectionVariables.set('accessToken', jsonData.data.accessToken);","    pm.collectionVariables.set('refreshToken', jsonData.data.refreshToken);","}"], "type": "text/javascript" }}],
           "request": {
             "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"email\": \"{{adminEmail}}\",\n  \"password\": \"SuperSecretAdminPassword1!\"\n}"
-            },
-            "url": {
-              "raw": "{{baseUrl}}/auth/login",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "auth",
-                "login"
-              ]
-            }
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"{{adminEmail}}\",\n  \"password\": \"SuperSecretAdminPassword1!\"\n}" },
+            "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth","login"] }
           }
         },
         {
           "name": "Refresh Token",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "var jsonData = pm.response.json();",
-                  "if (jsonData.status === 'success' && jsonData.data) {",
-                  "    pm.collectionVariables.set('accessToken', jsonData.data.accessToken);",
-                  "    pm.collectionVariables.set('refreshToken', jsonData.data.refreshToken);",
-                  "}"
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
+          "event": [{ "listen": "test", "script": { "exec": ["var jsonData = pm.response.json();","if (jsonData.status === 'success' && jsonData.data) {","    pm.collectionVariables.set('accessToken', jsonData.data.accessToken);","    pm.collectionVariables.set('refreshToken', jsonData.data.refreshToken);","}"], "type": "text/javascript" }}],
           "request": {
             "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}"
-            },
-            "url": {
-              "raw": "{{baseUrl}}/auth/refresh",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "auth",
-                "refresh"
-              ]
-            }
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}" },
+            "url": { "raw": "{{baseUrl}}/auth/refresh", "host": ["{{baseUrl}}"], "path": ["auth","refresh"] }
           }
         },
         {
           "name": "Me",
           "request": {
             "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{accessToken}}"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/auth/me",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "auth",
-                "me"
-              ]
-            }
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": { "raw": "{{baseUrl}}/auth/me", "host": ["{{baseUrl}}"], "path": ["auth","me"] }
           }
         },
         {
           "name": "Logout",
           "request": {
             "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Authorization",
-                "value": "Bearer {{accessToken}}"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}"
-            },
-            "url": {
-              "raw": "{{baseUrl}}/auth/logout",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "auth",
-                "logout"
-              ]
-            }
+            "header": [{ "key": "Content-Type", "value": "application/json" },{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "body": { "mode": "raw", "raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}" },
+            "url": { "raw": "{{baseUrl}}/auth/logout", "host": ["{{baseUrl}}"], "path": ["auth","logout"] }
           }
         }
       ]
@@ -176,207 +59,130 @@
       "item": [
         {
           "name": "Health Check",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{hostUrl}}/health",
-              "host": [
-                "{{hostUrl}}"
-              ],
-              "path": [
-                "health"
-              ]
-            }
-          }
+          "request": { "method": "GET", "header": [], "url": { "raw": "{{hostUrl}}/health", "host": ["{{hostUrl}}"], "path": ["health"] } }
         }
       ]
     },
     {
       "name": "Customers",
+      "description": "Customer management endpoints (Phase 3)",
       "item": [
         {
           "name": "List Customers",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{accessToken}}"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/customers?page=1&limit=10",
-              "host": ["{{baseUrl}}"],
-              "path": ["customers"],
-              "query": [
-                { "key": "page", "value": "1" },
-                { "key": "limit", "value": "10" }
-              ]
-            }
-          }
+          "request": { "method": "GET", "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }], "url": { "raw": "{{baseUrl}}/customers?page=1&limit=10", "host": ["{{baseUrl}}"], "path": ["customers"], "query": [{ "key": "page", "value": "1" },{ "key": "limit", "value": "10" }] } }
         },
         {
           "name": "Create Customer",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Authorization",
-                "value": "Bearer {{accessToken}}"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"name\": \"John Doe\",\n  \"phone\": \"9876543210\",\n  \"email\": \"john@example.com\",\n  \"type\": \"RETAIL\",\n  \"address\": \"123 Main St\",\n  \"city\": \"Mumbai\"\n}"
-            },
-            "url": {
-              "raw": "{{baseUrl}}/customers",
-              "host": ["{{baseUrl}}"],
-              "path": ["customers"]
-            }
-          }
+          "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" },{ "key": "Authorization", "value": "Bearer {{accessToken}}" }], "body": { "mode": "raw", "raw": "{\n  \"name\": \"John Doe\",\n  \"phone\": \"9876543210\",\n  \"email\": \"john@example.com\",\n  \"type\": \"RETAIL\",\n  \"address\": \"123 Main St\",\n  \"city\": \"Mumbai\"\n}" }, "url": { "raw": "{{baseUrl}}/customers", "host": ["{{baseUrl}}"], "path": ["customers"] } }
         },
         {
           "name": "Get Customer",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{accessToken}}"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/customers/:id",
-              "host": ["{{baseUrl}}"],
-              "path": ["customers", ":id"],
-              "variable": [
-                {
-                  "key": "id",
-                  "value": "uuid-here"
-                }
-              ]
-            }
-          }
+          "request": { "method": "GET", "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }], "url": { "raw": "{{baseUrl}}/customers/:id", "host": ["{{baseUrl}}"], "path": ["customers",":id"], "variable": [{ "key": "id", "value": "uuid-here" }] } }
         },
         {
           "name": "Update Customer",
-          "request": {
-            "method": "PATCH",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Authorization",
-                "value": "Bearer {{accessToken}}"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"name\": \"John Updated\",\n  \"status\": \"INACTIVE\"\n}"
-            },
-            "url": {
-              "raw": "{{baseUrl}}/customers/:id",
-              "host": ["{{baseUrl}}"],
-              "path": ["customers", ":id"],
-              "variable": [
-                {
-                  "key": "id",
-                  "value": "uuid-here"
-                }
-              ]
-            }
-          }
+          "request": { "method": "PATCH", "header": [{ "key": "Content-Type", "value": "application/json" },{ "key": "Authorization", "value": "Bearer {{accessToken}}" }], "body": { "mode": "raw", "raw": "{\n  \"name\": \"John Updated\",\n  \"status\": \"INACTIVE\"\n}" }, "url": { "raw": "{{baseUrl}}/customers/:id", "host": ["{{baseUrl}}"], "path": ["customers",":id"], "variable": [{ "key": "id", "value": "uuid-here" }] } }
         },
         {
           "name": "Delete Customer",
-          "request": {
-            "method": "DELETE",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{accessToken}}"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/customers/:id",
-              "host": ["{{baseUrl}}"],
-              "path": ["customers", ":id"],
-              "variable": [
-                {
-                  "key": "id",
-                  "value": "uuid-here"
-                }
-              ]
-            }
-          }
+          "request": { "method": "DELETE", "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }], "url": { "raw": "{{baseUrl}}/customers/:id", "host": ["{{baseUrl}}"], "path": ["customers",":id"], "variable": [{ "key": "id", "value": "uuid-here" }] } }
         },
         {
           "name": "Get My Profile",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{accessToken}}"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/customers/me/profile",
-              "host": ["{{baseUrl}}"],
-              "path": ["customers", "me", "profile"]
-            }
-          }
+          "request": { "method": "GET", "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }], "url": { "raw": "{{baseUrl}}/customers/me/profile", "host": ["{{baseUrl}}"], "path": ["customers","me","profile"] } }
         },
         {
           "name": "Update My Profile",
-          "request": {
-            "method": "PATCH",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Authorization",
-                "value": "Bearer {{accessToken}}"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"address\": \"456 New Home\",\n  \"city\": \"Delhi\"\n}"
-            },
-            "url": {
-              "raw": "{{baseUrl}}/customers/me/profile",
-              "host": ["{{baseUrl}}"],
-              "path": ["customers", "me", "profile"]
-            }
-          }
+          "request": { "method": "PATCH", "header": [{ "key": "Content-Type", "value": "application/json" },{ "key": "Authorization", "value": "Bearer {{accessToken}}" }], "body": { "mode": "raw", "raw": "{\n  \"address\": \"456 New Home\",\n  \"city\": \"Delhi\"\n}" }, "url": { "raw": "{{baseUrl}}/customers/me/profile", "host": ["{{baseUrl}}"], "path": ["customers","me","profile"] } }
         }
-      ],
-      "description": "Customer management endpoints (Phase 3+)"
+      ]
     },
     {
       "name": "Drivers",
-      "item": [],
-      "description": "Driver management endpoints (Phase 3+)"
+      "description": "Driver management endpoints (Phase 4)",
+      "item": [
+        {
+          "name": "List Drivers",
+          "request": { "method": "GET", "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }], "url": { "raw": "{{baseUrl}}/drivers?page=1&limit=10", "host": ["{{baseUrl}}"], "path": ["drivers"], "query": [{ "key": "page", "value": "1" },{ "key": "limit", "value": "10" },{ "key": "status", "value": "", "disabled": true },{ "key": "licenseType", "value": "", "disabled": true },{ "key": "search", "value": "", "disabled": true }] } }
+        },
+        {
+          "name": "Create Driver",
+          "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" },{ "key": "Authorization", "value": "Bearer {{accessToken}}" }], "body": { "mode": "raw", "raw": "{\n  \"name\": \"Ravi Kumar\",\n  \"phone\": \"+919876500001\",\n  \"address\": \"12 MG Road, Patna\",\n  \"dob\": \"1992-05-15\",\n  \"licenseNumber\": \"DL-10-20240001\",\n  \"licenseType\": \"COMMERCIAL_LMV\",\n  \"licenseExpiry\": \"2028-12-31\",\n  \"joiningDate\": \"2024-06-01\"\n}" }, "url": { "raw": "{{baseUrl}}/drivers", "host": ["{{baseUrl}}"], "path": ["drivers"] } }
+        },
+        {
+          "name": "Get Driver",
+          "request": { "method": "GET", "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }], "url": { "raw": "{{baseUrl}}/drivers/:id", "host": ["{{baseUrl}}"], "path": ["drivers",":id"], "variable": [{ "key": "id", "value": "uuid-here" }] } }
+        },
+        {
+          "name": "Update Driver",
+          "request": { "method": "PATCH", "header": [{ "key": "Content-Type", "value": "application/json" },{ "key": "Authorization", "value": "Bearer {{accessToken}}" }], "body": { "mode": "raw", "raw": "{\n  \"name\": \"Ravi Kumar Updated\",\n  \"status\": \"OFF_DUTY\"\n}" }, "url": { "raw": "{{baseUrl}}/drivers/:id", "host": ["{{baseUrl}}"], "path": ["drivers",":id"], "variable": [{ "key": "id", "value": "uuid-here" }] } }
+        },
+        {
+          "name": "Delete Driver",
+          "request": { "method": "DELETE", "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }], "url": { "raw": "{{baseUrl}}/drivers/:id", "host": ["{{baseUrl}}"], "path": ["drivers",":id"], "variable": [{ "key": "id", "value": "uuid-here" }] } }
+        }
+      ]
     },
     {
       "name": "Vehicles",
-      "item": [],
-      "description": "Vehicle management endpoints (Phase 3+)"
+      "description": "Vehicle management endpoints (Phase 4)",
+      "item": [
+        {
+          "name": "List Vehicles",
+          "request": { "method": "GET", "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }], "url": { "raw": "{{baseUrl}}/vehicles?page=1&limit=10", "host": ["{{baseUrl}}"], "path": ["vehicles"], "query": [{ "key": "page", "value": "1" },{ "key": "limit", "value": "10" },{ "key": "status", "value": "", "disabled": true },{ "key": "category", "value": "", "disabled": true },{ "key": "search", "value": "", "disabled": true }] } }
+        },
+        {
+          "name": "Create Vehicle",
+          "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" },{ "key": "Authorization", "value": "Bearer {{accessToken}}" }], "body": { "mode": "raw", "raw": "{\n  \"plateNumber\": \"BR01-AB-1234\",\n  \"model\": \"Toyota Innova Crysta\",\n  \"category\": \"INNOVA\",\n  \"year\": 2024,\n  \"seats\": 6,\n  \"luggageCapacity\": 3,\n  \"fuelType\": \"Diesel\",\n  \"color\": \"Silver\",\n  \"fitnessExpiry\": \"2027-06-30\",\n  \"insuranceExpiry\": \"2027-06-30\",\n  \"permitExpiry\": \"2027-06-30\",\n  \"pucExpiry\": \"2027-06-30\"\n}" }, "url": { "raw": "{{baseUrl}}/vehicles", "host": ["{{baseUrl}}"], "path": ["vehicles"] } }
+        },
+        {
+          "name": "Get Vehicle",
+          "request": { "method": "GET", "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }], "url": { "raw": "{{baseUrl}}/vehicles/:id", "host": ["{{baseUrl}}"], "path": ["vehicles",":id"], "variable": [{ "key": "id", "value": "uuid-here" }] } }
+        },
+        {
+          "name": "Update Vehicle",
+          "request": { "method": "PATCH", "header": [{ "key": "Content-Type", "value": "application/json" },{ "key": "Authorization", "value": "Bearer {{accessToken}}" }], "body": { "mode": "raw", "raw": "{\n  \"color\": \"Black\",\n  \"status\": \"MAINTENANCE\"\n}" }, "url": { "raw": "{{baseUrl}}/vehicles/:id", "host": ["{{baseUrl}}"], "path": ["vehicles",":id"], "variable": [{ "key": "id", "value": "uuid-here" }] } }
+        },
+        {
+          "name": "Delete Vehicle",
+          "request": { "method": "DELETE", "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }], "url": { "raw": "{{baseUrl}}/vehicles/:id", "host": ["{{baseUrl}}"], "path": ["vehicles",":id"], "variable": [{ "key": "id", "value": "uuid-here" }] } }
+        },
+        {
+          "name": "Assign Driver",
+          "request": { "method": "PATCH", "header": [{ "key": "Content-Type", "value": "application/json" },{ "key": "Authorization", "value": "Bearer {{accessToken}}" }], "body": { "mode": "raw", "raw": "{\n  \"driverId\": \"driver-uuid-here\"\n}" }, "url": { "raw": "{{baseUrl}}/vehicles/:id/assign", "host": ["{{baseUrl}}"], "path": ["vehicles",":id","assign"], "variable": [{ "key": "id", "value": "vehicle-uuid-here" }] } }
+        }
+      ]
+    },
+    {
+      "name": "Maintenance",
+      "description": "Vehicle maintenance record endpoints (Phase 4)",
+      "item": [
+        {
+          "name": "List Maintenance",
+          "request": { "method": "GET", "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }], "url": { "raw": "{{baseUrl}}/vehicles/:vehicleId/maintenance", "host": ["{{baseUrl}}"], "path": ["vehicles",":vehicleId","maintenance"], "variable": [{ "key": "vehicleId", "value": "vehicle-uuid-here" }] } }
+        },
+        {
+          "name": "Add Maintenance",
+          "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" },{ "key": "Authorization", "value": "Bearer {{accessToken}}" }], "body": { "mode": "raw", "raw": "{\n  \"date\": \"2026-07-15\",\n  \"type\": \"Oil Change\",\n  \"cost\": 2500,\n  \"description\": \"Regular oil change and filter replacement\",\n  \"provider\": \"AutoCare Patna\"\n}" }, "url": { "raw": "{{baseUrl}}/vehicles/:vehicleId/maintenance", "host": ["{{baseUrl}}"], "path": ["vehicles",":vehicleId","maintenance"], "variable": [{ "key": "vehicleId", "value": "vehicle-uuid-here" }] } }
+        },
+        {
+          "name": "Get Maintenance",
+          "request": { "method": "GET", "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }], "url": { "raw": "{{baseUrl}}/vehicles/:vehicleId/maintenance/:id", "host": ["{{baseUrl}}"], "path": ["vehicles",":vehicleId","maintenance",":id"], "variable": [{ "key": "vehicleId", "value": "vehicle-uuid-here" },{ "key": "id", "value": "record-uuid-here" }] } }
+        },
+        {
+          "name": "Update Maintenance",
+          "request": { "method": "PATCH", "header": [{ "key": "Content-Type", "value": "application/json" },{ "key": "Authorization", "value": "Bearer {{accessToken}}" }], "body": { "mode": "raw", "raw": "{\n  \"cost\": 3000,\n  \"description\": \"Updated maintenance description\"\n}" }, "url": { "raw": "{{baseUrl}}/vehicles/:vehicleId/maintenance/:id", "host": ["{{baseUrl}}"], "path": ["vehicles",":vehicleId","maintenance",":id"], "variable": [{ "key": "vehicleId", "value": "vehicle-uuid-here" },{ "key": "id", "value": "record-uuid-here" }] } }
+        },
+        {
+          "name": "Delete Maintenance",
+          "request": { "method": "DELETE", "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }], "url": { "raw": "{{baseUrl}}/vehicles/:vehicleId/maintenance/:id", "host": ["{{baseUrl}}"], "path": ["vehicles",":vehicleId","maintenance",":id"], "variable": [{ "key": "vehicleId", "value": "vehicle-uuid-here" },{ "key": "id", "value": "record-uuid-here" }] } }
+        }
+      ]
     },
     {
       "name": "Bookings",
       "item": [],
-      "description": "Booking management endpoints (Phase 3+)"
+      "description": "Booking management endpoints (Phase 5+)"
     }
   ]
 }

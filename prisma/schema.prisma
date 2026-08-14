@@ -173,7 +173,7 @@ model Driver {
   id                    String       @id @default(uuid()) @db.Uuid
   driverCode            String       @unique // DRV-XXX
   name                  String
-  phone                 String
+  phone                 String       @unique
   email                 String?
   address               String
   dob                   DateTime     @db.Date
@@ -198,6 +198,7 @@ model Driver {
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
 
+  @@index([status])
   @@map("drivers")
 }
 
@@ -229,6 +230,8 @@ model Vehicle {
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
 
+  @@index([status])
+  @@index([category, status])
   @@map("vehicles")
 }
 
