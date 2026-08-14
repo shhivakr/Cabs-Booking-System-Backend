@@ -4,6 +4,7 @@ import helmet from "helmet";
 import { pinoHttp } from "pino-http";
 import { logger } from "./utils/logger.js";
 import { errorHandler } from "./middleware/errorHandler.js";
+import authRoutes from "./routes/auth.routes.js";
 
 const app = express();
 
@@ -25,6 +26,8 @@ app.get("/health", (_req, res) => {
     message: "Cab CRM Backend is running",
   });
 });
+
+app.use("/api/v1/auth", authRoutes);
 
 // Register global error handler (must be last)
 app.use(errorHandler);

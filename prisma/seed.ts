@@ -1,4 +1,6 @@
 import { PrismaClient, CustomerType, LicenseType, VehicleCategory, TripType, PaymentStatus, BookingStatus, BookingSource, Role } from '@prisma/client';
+import bcrypt from "bcrypt";
+import { env } from "../src/config/env.js";
 import { generateBookingId, generateCustomerId, generateDriverId, generateVehicleId } from '../src/utils/idGenerator.js';
 
 const prisma = new PrismaClient();
@@ -12,15 +14,23 @@ async function main() {
   await prisma.vehicle.deleteMany();
   await prisma.driver.deleteMany();
   await prisma.customer.deleteMany();
+  await prisma.refreshToken.deleteMany();
   await prisma.user.deleteMany();
 
   console.log('Seeding initial admin user...');
-  await prisma.user.create({
-    data: {
-      name: "Vikram Sahay",
-      email: "admin@taxicrm.com",
+  const adminPasswordHash = await bcrypt.hash(env.SUPER_ADMIN_PASSWORD, env.BCRYPT_ROUNDS);
+
+  await prisma.user.upsert({
+    where: { email: env.SUPER_ADMIN_EMAIL },
+    update: {
+      passwordHash: adminPasswordHash,
+      role: Role.SUPER_ADMIN,
+    },
+    create: {
+      name: "Super Admin",
+      email: env.SUPER_ADMIN_EMAIL,
       phone: "+919876543210",
-      passwordHash: "$2b$10$EP4k6qX/6O5B4hQ1Z7D6JOk0tQjR7A8B7H/K8W9.R1C", // Placeholder hash
+      passwordHash: adminPasswordHash,
       role: Role.SUPER_ADMIN,
     }
   });
