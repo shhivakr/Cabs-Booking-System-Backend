@@ -1,0 +1,336 @@
+// This is your Prisma schema file
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// Enums
+enum Role {
+  SUPER_ADMIN
+  ADMIN
+  DISPATCHER
+  ACCOUNTANT
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum CustomerType {
+  RETAIL
+  CORPORATE
+}
+
+enum CustomerStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum LicenseType {
+  COMMERCIAL_LMV
+  COMMERCIAL_HMV
+  COMMERCIAL_PSV
+}
+
+enum DriverStatus {
+  AVAILABLE
+  ASSIGNED
+  ON_TRIP
+  OFF_DUTY
+  INACTIVE
+}
+
+enum VehicleCategory {
+  SEDAN
+  SUV
+  INNOVA
+  TEMPO_TRAVELLER
+  PREMIUM
+}
+
+enum VehicleStatus {
+  AVAILABLE
+  ASSIGNED
+  ON_TRIP
+  MAINTENANCE
+  INACTIVE
+}
+
+enum TripType {
+  LOCAL
+  AIRPORT
+  OUTSTATION
+  CORPORATE
+}
+
+enum PaymentStatus {
+  PENDING
+  PARTIAL
+  PAID
+  REFUNDED
+}
+
+enum PaymentMethod {
+  CASH
+  UPI
+  CORPORATE_CREDIT
+  CARD
+  BANK_TRANSFER
+}
+
+enum BookingStatus {
+  NEW
+  CONFIRMED
+  DRIVER_ASSIGNED
+  DRIVER_ARRIVED
+  ON_TRIP
+  COMPLETED
+  CANCELLED
+}
+
+enum BookingSource {
+  CUSTOMER_PORTAL
+  DISPATCHER_DIRECT
+  CORPORATE_DESK
+  PHONE_RESERVATION
+}
+
+// Models
+model User {
+  id           String     @id @default(uuid()) @db.Uuid
+  name         String
+  email        String     @unique
+  phone        String
+  passwordHash String
+  role         Role
+  status       UserStatus @default(ACTIVE)
+  lastLoginAt  DateTime?
+
+  auditLogs AuditLog[]
+  settings  Setting[]  @relation("UpdatedBy")
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@map("users")
+}
+
+model Customer {
+  id                     String         @id @default(uuid()) @db.Uuid
+  customerCode           String         @unique // CUST-XXX
+  name                   String
+  phone                  String         @unique
+  email                  String
+  type                   CustomerType   @default(RETAIL)
+  status                 CustomerStatus @default(ACTIVE)
+  companyName            String?
+  gstin                  String?
+  address                String
+  city                   String
+  totalTrips             Int            @default(0)
+  lifetimeSpend          Decimal        @default(0) @db.Decimal(10, 2)
+  lastBookingDate        DateTime?
+  preferredContactMethod String?
+  notes                  String?        @db.Text
+
+  bookings Booking[]
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@map("customers")
+}
+
+model Driver {
+  id                    String       @id @default(uuid()) @db.Uuid
+  driverCode            String       @unique // DRV-XXX
+  name                  String
+  phone                 String
+  email                 String?
+  address               String
+  dob                   DateTime     @db.Date
+  licenseNumber         String       @unique
+  licenseType           LicenseType
+  licenseExpiry         DateTime     @db.Date
+  joiningDate           DateTime     @db.Date
+  emergencyContactName  String?
+  emergencyContactPhone String?
+  rating                Decimal      @default(0) @db.Decimal(3, 2)
+  tripsCompleted        Int          @default(0)
+  totalEarnings         Decimal      @default(0) @db.Decimal(10, 2)
+  status                DriverStatus @default(AVAILABLE)
+  experience            String?
+
+  assignedVehicleId String?  @unique @db.Uuid
+  assignedVehicle   Vehicle? @relation(fields: [assignedVehicleId], references: [id])
+
+  bookings Booking[]
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@map("drivers")
+}
+
+model Vehicle {
+  id              String          @id @default(uuid()) @db.Uuid
+  vehicleCode     String          @unique // VH-XXX
+  plateNumber     String          @unique
+  model           String
+  category        VehicleCategory
+  year            Int
+  seats           Int
+  luggageCapacity Int
+  hasAc           Boolean         @default(true)
+  fuelType        String
+  color           String
+  status          VehicleStatus   @default(AVAILABLE)
+
+  fitnessExpiry   DateTime @db.Date
+  insuranceExpiry DateTime @db.Date
+  permitExpiry    DateTime @db.Date
+  pucExpiry       DateTime @db.Date
+
+  assignedDriver Driver?
+
+  bookings           Booking[]
+  maintenanceRecords MaintenanceRecord[]
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@map("vehicles")
+}
+
+model Booking {
+  id          String @id @default(uuid()) @db.Uuid
+  bookingCode String @unique // PAT-2026-XXXXX
+
+  customerId String   @db.Uuid
+  customer   Customer @relation(fields: [customerId], references: [id])
+
+  // Denormalized Customer Data
+  customerName  String
+  customerPhone String
+  customerEmail String?
+  customerType  CustomerType?
+  customerCity  String?
+
+  pickupLocation String
+  dropLocation   String
+  pickupDate     DateTime @db.Date
+  pickupTime     String // HH:mm
+
+  tripType        TripType
+  vehicleCategory VehicleCategory
+  passengers      Int             @default(1)
+  luggage         Int             @default(0)
+
+  estimatedDistance String?
+  estimatedDuration String?
+
+  fare          Decimal       @db.Decimal(10, 2)
+  advance       Decimal       @default(0) @db.Decimal(10, 2)
+  remaining     Decimal       @db.Decimal(10, 2)
+  paymentStatus PaymentStatus @default(PENDING)
+  paymentMethod PaymentMethod @default(CASH)
+
+  status BookingStatus @default(NEW)
+  source BookingSource
+
+  driverId String? @db.Uuid
+  driver   Driver? @relation(fields: [driverId], references: [id])
+
+  // Denormalized Driver Data
+  driverName    String?
+  driverPhone   String?
+  driverRating  Decimal? @db.Decimal(3, 2)
+  driverLicense String?
+
+  vehicleId String?  @db.Uuid
+  vehicle   Vehicle? @relation(fields: [vehicleId], references: [id])
+
+  // Denormalized Vehicle Data
+  vehiclePlate String?
+  vehicleModel String?
+
+  specialInstructions String? @db.Text
+  cancellationReason  String?
+  cancellationNotes   String? @db.Text
+
+  timelineEvents TimelineEvent[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("bookings")
+}
+
+model TimelineEvent {
+  id          String   @id @default(uuid()) @db.Uuid
+  bookingId   String   @db.Uuid
+  booking     Booking  @relation(fields: [bookingId], references: [id])
+  timestamp   DateTime
+  title       String
+  description String?  @db.Text
+  completed   Boolean
+  current     Boolean  @default(false)
+
+  createdAt DateTime @default(now())
+
+  @@map("timeline_events")
+}
+
+model MaintenanceRecord {
+  id          String   @id @default(uuid()) @db.Uuid
+  vehicleId   String   @db.Uuid
+  vehicle     Vehicle  @relation(fields: [vehicleId], references: [id])
+  date        DateTime @db.Date
+  type        String
+  cost        Decimal  @db.Decimal(10, 2)
+  description String   @db.Text
+  provider    String
+
+  createdAt DateTime @default(now())
+
+  @@map("maintenance_records")
+}
+
+model AuditLog {
+  id         String  @id @default(uuid()) @db.Uuid
+  userId     String? @db.Uuid
+  user       User?   @relation(fields: [userId], references: [id])
+  entityType String
+  entityId   String
+  action     String
+  changes    Json?
+  ipAddress  String?
+  userAgent  String?
+
+  createdAt DateTime @default(now())
+
+  @@map("audit_logs")
+}
+
+model Setting {
+  key      String @id
+  value    String @db.Text
+  category String
+
+  updatedById String? @db.Uuid
+  updatedBy   User?   @relation("UpdatedBy", fields: [updatedById], references: [id])
+
+  updatedAt DateTime @updatedAt
+
+  @@map("settings")
+}
