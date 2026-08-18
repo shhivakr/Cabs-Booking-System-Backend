@@ -13,6 +13,7 @@ import { bookingRoutes } from './routes/booking.routes.js';
 import { bookingPaymentRoutes, paymentRoutes } from './routes/payment.routes.js';
 import { dashboardRoutes } from './routes/dashboard.routes.js';
 import { reportRoutes } from './routes/report.routes.js';
+import { calendarRoutes } from './routes/calendar.routes.js';
 const app = express();
 
 app.use(helmet());
@@ -44,6 +45,7 @@ app.use("/api/v1/bookings/:bookingId/payments", bookingPaymentRoutes);
 app.use("/api/v1/payments", paymentRoutes);
 app.use("/api/v1/dashboard", dashboardRoutes);
 app.use("/api/v1/reports", reportRoutes);
+app.use("/api/v1/calendar", calendarRoutes);
 // Register global error handler (must be last)
 app.use(errorHandler);
 

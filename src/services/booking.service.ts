@@ -2,6 +2,7 @@ import { BookingStatus, BookingSource, TripType, VehicleCategory, PaymentStatus,
 import { prisma } from '../config/database.js';
 import { AppError } from '../utils/errors.js';
 import { z } from 'zod';
+import * as schedulingService from './scheduling.service.js';
 
 // --- Validation Schemas ---
 
@@ -295,8 +296,8 @@ export const assignBooking = async (
       throw new AppError('Driver not found or inactive', 400);
     }
 
-    if (driver.status !== 'AVAILABLE' && booking.driverId !== driver.id) {
-      throw new AppError('Driver is not available', 409);
+    if (['INACTIVE', 'OFF_DUTY'].includes(driver.status)) {
+      throw new AppError('Driver is not available', 400);
     }
 
     // Check Vehicle
@@ -305,18 +306,40 @@ export const assignBooking = async (
       throw new AppError('Vehicle not found or inactive', 400);
     }
 
-    if (vehicle.status !== 'AVAILABLE' && booking.vehicleId !== vehicle.id) {
-      throw new AppError('Vehicle is not available', 409);
+    if (['INACTIVE', 'MAINTENANCE'].includes(vehicle.status)) {
+      throw new AppError('Vehicle is not available', 400);
     }
+
+    // Phase 8: Authoritative scheduling conflict check
+    await schedulingService.validateAssignmentAvailability(
+      driver.id, 
+      vehicle.id, 
+      booking.pickupDate, 
+      booking.pickupTime, 
+      booking.id, 
+      tx
+    );
 
     // Release old driver/vehicle if they changed
     if (booking.driverId && booking.driverId !== driver.id) {
-      await tx.driver.update({ where: { id: booking.driverId }, data: { status: 'AVAILABLE', assignedVehicleId: null } });
+      const { driverHasOther } = await schedulingService.getHasOtherActiveBookings(booking.driverId, null, booking.id, tx);
+      await tx.driver.update({ 
+        where: { id: booking.driverId }, 
+        data: { 
+          status: driverHasOther ? 'ASSIGNED' : 'AVAILABLE', 
+          assignedVehicleId: driverHasOther ? undefined : null 
+        } 
+      });
     }
     if (booking.vehicleId && booking.vehicleId !== vehicle.id) {
-      await tx.vehicle.update({ where: { id: booking.vehicleId }, data: { status: 'AVAILABLE' } });
+      const { vehicleHasOther } = await schedulingService.getHasOtherActiveBookings(null, booking.vehicleId, booking.id, tx);
+      await tx.vehicle.update({ 
+        where: { id: booking.vehicleId }, 
+        data: { status: vehicleHasOther ? 'ASSIGNED' : 'AVAILABLE' } 
+      });
+      
       // Remove old driver's vehicle association if applicable
-      if (booking.driverId) {
+      if (booking.driverId && !vehicleHasOther) {
          await tx.driver.updateMany({
            where: { assignedVehicleId: booking.vehicleId },
            data: { assignedVehicleId: null }
@@ -325,8 +348,17 @@ export const assignBooking = async (
     }
 
     // Assign new driver and vehicle
-    await tx.driver.update({ where: { id: driver.id }, data: { status: 'ASSIGNED', assignedVehicleId: vehicle.id } });
-    await tx.vehicle.update({ where: { id: vehicle.id }, data: { status: 'ASSIGNED' } });
+    await tx.driver.update({ 
+      where: { id: driver.id }, 
+      data: { 
+        status: driver.status === 'AVAILABLE' ? 'ASSIGNED' : driver.status, 
+        assignedVehicleId: vehicle.id 
+      } 
+    });
+    await tx.vehicle.update({ 
+      where: { id: vehicle.id }, 
+      data: { status: vehicle.status === 'AVAILABLE' ? 'ASSIGNED' : vehicle.status } 
+    });
 
     // Transition status if NEW or CONFIRMED
     const newStatus = ['NEW', 'CONFIRMED'].includes(booking.status) ? BookingStatus.DRIVER_ASSIGNED : booking.status;
@@ -398,17 +430,23 @@ export const transitionBookingStatus = async (
     // Handle COMPLETED lifecycle changes
     if (to === 'COMPLETED') {
       if (booking.driverId) {
+        const { driverHasOther } = await schedulingService.getHasOtherActiveBookings(booking.driverId, null, booking.id, tx);
         await tx.driver.update({ 
           where: { id: booking.driverId }, 
           data: { 
-            status: 'AVAILABLE',
+            status: driverHasOther ? 'ASSIGNED' : 'AVAILABLE',
+            assignedVehicleId: driverHasOther ? undefined : null,
             tripsCompleted: { increment: 1 },
             totalEarnings: { increment: booking.fare }
           } 
         });
       }
       if (booking.vehicleId) {
-        await tx.vehicle.update({ where: { id: booking.vehicleId }, data: { status: 'AVAILABLE' } });
+        const { vehicleHasOther } = await schedulingService.getHasOtherActiveBookings(null, booking.vehicleId, booking.id, tx);
+        await tx.vehicle.update({ 
+          where: { id: booking.vehicleId }, 
+          data: { status: vehicleHasOther ? 'ASSIGNED' : 'AVAILABLE' } 
+        });
       }
       await tx.customer.update({
         where: { id: booking.customerId },
@@ -423,10 +461,21 @@ export const transitionBookingStatus = async (
     // Handle CANCELLED lifecycle changes if transitioned via status (though cancel endpoint is preferred)
     if (to === 'CANCELLED') {
       if (booking.driverId) {
-        await tx.driver.update({ where: { id: booking.driverId }, data: { status: 'AVAILABLE' } });
+        const { driverHasOther } = await schedulingService.getHasOtherActiveBookings(booking.driverId, null, booking.id, tx);
+        await tx.driver.update({ 
+          where: { id: booking.driverId }, 
+          data: { 
+            status: driverHasOther ? 'ASSIGNED' : 'AVAILABLE',
+            assignedVehicleId: driverHasOther ? undefined : null
+          } 
+        });
       }
       if (booking.vehicleId) {
-        await tx.vehicle.update({ where: { id: booking.vehicleId }, data: { status: 'AVAILABLE' } });
+        const { vehicleHasOther } = await schedulingService.getHasOtherActiveBookings(null, booking.vehicleId, booking.id, tx);
+        await tx.vehicle.update({ 
+          where: { id: booking.vehicleId }, 
+          data: { status: vehicleHasOther ? 'ASSIGNED' : 'AVAILABLE' } 
+        });
       }
     }
     
@@ -485,10 +534,21 @@ export const cancelBooking = async (
     }
 
     if (booking.driverId) {
-      await tx.driver.update({ where: { id: booking.driverId }, data: { status: 'AVAILABLE' } });
+      const { driverHasOther } = await schedulingService.getHasOtherActiveBookings(booking.driverId, null, booking.id, tx);
+      await tx.driver.update({ 
+        where: { id: booking.driverId }, 
+        data: { 
+          status: driverHasOther ? 'ASSIGNED' : 'AVAILABLE',
+          assignedVehicleId: driverHasOther ? undefined : null
+        } 
+      });
     }
     if (booking.vehicleId) {
-      await tx.vehicle.update({ where: { id: booking.vehicleId }, data: { status: 'AVAILABLE' } });
+      const { vehicleHasOther } = await schedulingService.getHasOtherActiveBookings(null, booking.vehicleId, booking.id, tx);
+      await tx.vehicle.update({ 
+        where: { id: booking.vehicleId }, 
+        data: { status: vehicleHasOther ? 'ASSIGNED' : 'AVAILABLE' } 
+      });
     }
 
     await tx.timelineEvent.updateMany({
