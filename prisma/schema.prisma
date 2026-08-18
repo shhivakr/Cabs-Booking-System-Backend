@@ -117,6 +117,7 @@ model User {
   settings      Setting[]      @relation("UpdatedBy")
   refreshTokens RefreshToken[]
   customer      Customer?
+  payments      Payment[]
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
@@ -292,6 +293,7 @@ model Booking {
   cancellationNotes   String? @db.Text
 
   timelineEvents TimelineEvent[]
+  payments       Payment[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -356,4 +358,33 @@ model Setting {
   updatedAt DateTime @updatedAt
 
   @@map("settings")
+}
+
+model Payment {
+  id          String @id @default(uuid()) @db.Uuid
+  paymentCode String @unique // PAY-2026-XXXXX
+
+  bookingId String  @db.Uuid
+  booking   Booking @relation(fields: [bookingId], references: [id])
+
+  amount Decimal @db.Decimal(10, 2)
+
+  method PaymentMethod
+
+  status PaymentStatus @default(PAID)
+
+  referenceNumber String?
+  notes           String? @db.Text
+
+  paymentDate DateTime @db.Date
+
+  collectedById String? @db.Uuid
+  collectedBy   User?   @relation(fields: [collectedById], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([bookingId])
+  @@index([paymentDate])
+  @@map("payments")
 }

@@ -1,13 +1,14 @@
-import { CustomerType, LicenseType, VehicleCategory, TripType, PaymentStatus, BookingStatus, BookingSource, Role } from '@prisma/client';
+import { CustomerType, LicenseType, VehicleCategory, TripType, PaymentStatus, PaymentMethod, BookingStatus, BookingSource, Role } from '@prisma/client';
 import bcrypt from "bcrypt";
 import { env } from "../src/config/env.js";
-import { generateBookingId, generateCustomerId, generateDriverId, generateVehicleId } from '../src/utils/idGenerator.js';
+import { generatePaymentId } from '../src/utils/idGenerator.js';
 import { prisma } from "../src/config/database.js";
 
 async function main() {
   console.log('Clearing database...');
   await prisma.timelineEvent.deleteMany();
   await prisma.auditLog.deleteMany();
+  await prisma.payment.deleteMany();         // Phase 6: must come before booking
   await prisma.maintenanceRecord.deleteMany();
   await prisma.booking.deleteMany();
   await prisma.vehicle.deleteMany();
@@ -19,7 +20,7 @@ async function main() {
   console.log('Seeding initial admin user...');
   const adminPasswordHash = await bcrypt.hash(env.SUPER_ADMIN_PASSWORD, env.BCRYPT_ROUNDS);
 
-  await prisma.user.upsert({
+  const adminUser = await prisma.user.upsert({
     where: { email: env.SUPER_ADMIN_EMAIL },
     update: {
       passwordHash: adminPasswordHash,
@@ -40,7 +41,7 @@ async function main() {
     const isCorporate = i % 5 === 0;
     customers.push(await prisma.customer.create({
       data: {
-        customerCode: `CUST-100${i}`, // Deterministic code
+        customerCode: `CUST-100${i}`,
         name: `Customer ${i}`,
         phone: `+9198000000${i.toString().padStart(2, '0')}`,
         email: `customer${i}@example.com`,
@@ -104,13 +105,18 @@ async function main() {
     });
   }
 
-  console.log('Seeding bookings...');
+  console.log('Seeding bookings and payments...');
+  const fare = 1500.00;
+  const advance = 500.00;
+  const finalPayment = fare - advance; // 1000.00
+
   for (let i = 1; i <= 48; i++) {
     const customer = customers[i % 22]!;
     const driver = drivers[i % 12]!;
     const vehicle = vehicles[i % 12]!;
-    
-    await prisma.booking.create({
+
+    // Booking is fully paid: remaining = 0, paymentStatus = PAID
+    const booking = await prisma.booking.create({
       data: {
         bookingCode: `PAT-2026-${i.toString().padStart(5, '0')}`,
         customerId: customer.id,
@@ -124,10 +130,10 @@ async function main() {
         pickupTime: "10:00",
         tripType: TripType.LOCAL,
         vehicleCategory: vehicle.category,
-        fare: 1500.00,
-        advance: 500.00,
-        remaining: 1000.00,
-        paymentStatus: PaymentStatus.PARTIAL,
+        fare: fare,
+        advance: advance,
+        remaining: 0,                    // Fully paid
+        paymentStatus: PaymentStatus.PAID,
         status: BookingStatus.COMPLETED,
         source: BookingSource.CUSTOMER_PORTAL,
         driverId: driver.id,
@@ -136,6 +142,34 @@ async function main() {
         vehicleId: vehicle.id,
         vehiclePlate: vehicle.plateNumber,
         vehicleModel: vehicle.model,
+      }
+    });
+
+    // Seed advance payment record
+    await prisma.payment.create({
+      data: {
+        paymentCode: `PAY-2026-A${i.toString().padStart(4, '0')}`,
+        bookingId: booking.id,
+        amount: advance,
+        method: PaymentMethod.CASH,
+        status: PaymentStatus.PAID,
+        notes: 'Advance payment at booking',
+        paymentDate: new Date(),
+        collectedById: adminUser.id,
+      }
+    });
+
+    // Seed final payment record
+    await prisma.payment.create({
+      data: {
+        paymentCode: `PAY-2026-B${i.toString().padStart(4, '0')}`,
+        bookingId: booking.id,
+        amount: finalPayment,
+        method: PaymentMethod.CASH,
+        status: PaymentStatus.PAID,
+        notes: 'Final payment at trip completion',
+        paymentDate: new Date(),
+        collectedById: adminUser.id,
       }
     });
   }

@@ -573,7 +573,7 @@
     },
     {
       "name": "Bookings",
-      "description": "Booking management endpoints (Phase 5+)",
+      "description": "Booking management endpoints (Phase 5)",
       "item": [
         {
           "name": "List Bookings",
@@ -674,11 +674,75 @@
             "header": [
               { "key": "Authorization", "value": "Bearer {{accessToken}}" }
             ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cancellationReason\": \"Customer request\"\n}"
+            },
             "url": {
               "raw": "{{baseUrl}}/bookings/:id/cancel",
               "host": ["{{baseUrl}}"],
               "path": ["bookings", ":id", "cancel"],
               "variable": [{ "key": "id", "value": "uuid-here" }]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Payments",
+      "description": "Payment management endpoints (Phase 6)",
+      "item": [
+        {
+          "name": "Create Payment",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": \"500\",\n  \"method\": \"CASH\",\n  \"paymentDate\": \"2026-12-01\",\n  \"referenceNumber\": null,\n  \"notes\": \"Advance payment\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/bookings/:bookingId/payments",
+              "host": ["{{baseUrl}}"],
+              "path": ["bookings", ":bookingId", "payments"],
+              "variable": [{ "key": "bookingId", "value": "booking-uuid-here" }]
+            }
+          }
+        },
+        {
+          "name": "List Booking Payments",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/bookings/:bookingId/payments?page=1&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["bookings", ":bookingId", "payments"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "10" }
+              ],
+              "variable": [{ "key": "bookingId", "value": "booking-uuid-here" }]
+            }
+          }
+        },
+        {
+          "name": "Get Payment",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/payments/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["payments", ":id"],
+              "variable": [{ "key": "id", "value": "payment-uuid-here" }]
             }
           }
         }

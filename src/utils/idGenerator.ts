@@ -21,3 +21,9 @@ export const generateVehicleId = (): string => {
   const random = crypto.randomBytes(2).toString("hex").toUpperCase();
   return `VH-${random}`;
 };
+
+export const generatePaymentId = (): string => {
+  const year = new Date().getFullYear();
+  const random = crypto.randomBytes(3).toString("hex").substring(0, 5).toUpperCase();
+  return `PAY-${year}-${random}`;
+};
