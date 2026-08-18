@@ -1,6 +1,7 @@
 import { Prisma, Role, BookingStatus, BookingSource, TripType } from '@prisma/client';
 import { prisma } from '../config/database.js';
-import { DateRangeQuery, resolveDateRange } from '../utils/date.js';
+import type { DateRangeQuery } from '../utils/date.js';
+import { resolveDateRange } from '../utils/date.js';
 import { z } from 'zod';
 import { AppError } from '../utils/errors.js';
 

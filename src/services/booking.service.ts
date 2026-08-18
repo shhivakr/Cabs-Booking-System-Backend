@@ -327,7 +327,7 @@ export const assignBooking = async (
         where: { id: booking.driverId }, 
         data: { 
           status: driverHasOther ? 'ASSIGNED' : 'AVAILABLE', 
-          assignedVehicleId: driverHasOther ? undefined : null 
+          ...(driverHasOther ? {} : { assignedVehicleId: null }) 
         } 
       });
     }
@@ -435,7 +435,7 @@ export const transitionBookingStatus = async (
           where: { id: booking.driverId }, 
           data: { 
             status: driverHasOther ? 'ASSIGNED' : 'AVAILABLE',
-            assignedVehicleId: driverHasOther ? undefined : null,
+            ...(driverHasOther ? {} : { assignedVehicleId: null }),
             tripsCompleted: { increment: 1 },
             totalEarnings: { increment: booking.fare }
           } 
@@ -466,7 +466,7 @@ export const transitionBookingStatus = async (
           where: { id: booking.driverId }, 
           data: { 
             status: driverHasOther ? 'ASSIGNED' : 'AVAILABLE',
-            assignedVehicleId: driverHasOther ? undefined : null
+            ...(driverHasOther ? {} : { assignedVehicleId: null })
           } 
         });
       }
@@ -539,7 +539,7 @@ export const cancelBooking = async (
         where: { id: booking.driverId }, 
         data: { 
           status: driverHasOther ? 'ASSIGNED' : 'AVAILABLE',
-          assignedVehicleId: driverHasOther ? undefined : null
+          ...(driverHasOther ? {} : { assignedVehicleId: null })
         } 
       });
     }
