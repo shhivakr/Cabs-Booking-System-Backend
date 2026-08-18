@@ -9,6 +9,7 @@ import { customerRoutes } from './routes/customer.routes.js';
 import { driverRoutes } from './routes/driver.routes.js';
 import { vehicleRoutes } from './routes/vehicle.routes.js';
 import { maintenanceRoutes } from './routes/maintenance.routes.js';
+import { bookingRoutes } from './routes/booking.routes.js';
 
 const app = express();
 
@@ -36,6 +37,7 @@ app.use("/api/v1/customers", customerRoutes);
 app.use("/api/v1/drivers", driverRoutes);
 app.use("/api/v1/vehicles", vehicleRoutes);
 app.use("/api/v1/vehicles/:vehicleId/maintenance", maintenanceRoutes);
+app.use("/api/v1/bookings", bookingRoutes);
 
 // Register global error handler (must be last)
 app.use(errorHandler);
