@@ -10,10 +10,26 @@
       "value": "http://localhost:5000/api/v1",
       "type": "string"
     },
-    { "key": "hostUrl", "value": "http://localhost:5000", "type": "string" },
-    { "key": "accessToken", "value": "", "type": "string" },
-    { "key": "refreshToken", "value": "", "type": "string" },
-    { "key": "adminEmail", "value": "admin@taxicrm.local", "type": "string" }
+    {
+      "key": "hostUrl",
+      "value": "http://localhost:5000",
+      "type": "string"
+    },
+    {
+      "key": "accessToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "refreshToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "adminEmail",
+      "value": "admin@taxicrm.local",
+      "type": "string"
+    }
   ],
   "item": [
     {
@@ -38,15 +54,25 @@
           ],
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"email\": \"{{adminEmail}}\",\n  \"password\": \"SuperSecretAdminPassword1!\"\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/auth/login",
-              "host": ["{{baseUrl}}"],
-              "path": ["auth", "login"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
             }
           }
         },
@@ -69,15 +95,25 @@
           ],
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/auth/refresh",
-              "host": ["{{baseUrl}}"],
-              "path": ["auth", "refresh"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "refresh"
+              ]
             }
           }
         },
@@ -86,12 +122,20 @@
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
             ],
             "url": {
               "raw": "{{baseUrl}}/auth/me",
-              "host": ["{{baseUrl}}"],
-              "path": ["auth", "me"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "me"
+              ]
             }
           }
         },
@@ -100,8 +144,14 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -109,8 +159,13 @@
             },
             "url": {
               "raw": "{{baseUrl}}/auth/logout",
-              "host": ["{{baseUrl}}"],
-              "path": ["auth", "logout"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "logout"
+              ]
             }
           }
         }
@@ -126,8 +181,12 @@
             "header": [],
             "url": {
               "raw": "{{hostUrl}}/health",
-              "host": ["{{hostUrl}}"],
-              "path": ["health"]
+              "host": [
+                "{{hostUrl}}"
+              ],
+              "path": [
+                "health"
+              ]
             }
           }
         }
@@ -142,15 +201,28 @@
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
             ],
             "url": {
               "raw": "{{baseUrl}}/customers?page=1&limit=10",
-              "host": ["{{baseUrl}}"],
-              "path": ["customers"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "customers"
+              ],
               "query": [
-                { "key": "page", "value": "1" },
-                { "key": "limit", "value": "10" }
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
               ]
             }
           }
@@ -160,8 +232,14 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -169,8 +247,12 @@
             },
             "url": {
               "raw": "{{baseUrl}}/customers",
-              "host": ["{{baseUrl}}"],
-              "path": ["customers"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "customers"
+              ]
             }
           }
         },
@@ -179,13 +261,26 @@
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
             ],
             "url": {
               "raw": "{{baseUrl}}/customers/:id",
-              "host": ["{{baseUrl}}"],
-              "path": ["customers", ":id"],
-              "variable": [{ "key": "id", "value": "uuid-here" }]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "customers",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "uuid-here"
+                }
+              ]
             }
           }
         },
@@ -194,8 +289,14 @@
           "request": {
             "method": "PATCH",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -203,9 +304,19 @@
             },
             "url": {
               "raw": "{{baseUrl}}/customers/:id",
-              "host": ["{{baseUrl}}"],
-              "path": ["customers", ":id"],
-              "variable": [{ "key": "id", "value": "uuid-here" }]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "customers",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "uuid-here"
+                }
+              ]
             }
           }
         },
@@ -214,13 +325,26 @@
           "request": {
             "method": "DELETE",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
             ],
             "url": {
               "raw": "{{baseUrl}}/customers/:id",
-              "host": ["{{baseUrl}}"],
-              "path": ["customers", ":id"],
-              "variable": [{ "key": "id", "value": "uuid-here" }]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "customers",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "uuid-here"
+                }
+              ]
             }
           }
         },
@@ -229,12 +353,21 @@
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
             ],
             "url": {
               "raw": "{{baseUrl}}/customers/me/profile",
-              "host": ["{{baseUrl}}"],
-              "path": ["customers", "me", "profile"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "customers",
+                "me",
+                "profile"
+              ]
             }
           }
         },
@@ -243,8 +376,14 @@
           "request": {
             "method": "PATCH",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -252,8 +391,14 @@
             },
             "url": {
               "raw": "{{baseUrl}}/customers/me/profile",
-              "host": ["{{baseUrl}}"],
-              "path": ["customers", "me", "profile"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "customers",
+                "me",
+                "profile"
+              ]
             }
           }
         }
@@ -268,18 +413,43 @@
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
             ],
             "url": {
               "raw": "{{baseUrl}}/drivers?page=1&limit=10",
-              "host": ["{{baseUrl}}"],
-              "path": ["drivers"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "drivers"
+              ],
               "query": [
-                { "key": "page", "value": "1" },
-                { "key": "limit", "value": "10" },
-                { "key": "status", "value": "", "disabled": true },
-                { "key": "licenseType", "value": "", "disabled": true },
-                { "key": "search", "value": "", "disabled": true }
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "key": "status",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "licenseType",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "search",
+                  "value": "",
+                  "disabled": true
+                }
               ]
             }
           }
@@ -289,8 +459,14 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -298,8 +474,12 @@
             },
             "url": {
               "raw": "{{baseUrl}}/drivers",
-              "host": ["{{baseUrl}}"],
-              "path": ["drivers"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "drivers"
+              ]
             }
           }
         },
@@ -308,13 +488,26 @@
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
             ],
             "url": {
               "raw": "{{baseUrl}}/drivers/:id",
-              "host": ["{{baseUrl}}"],
-              "path": ["drivers", ":id"],
-              "variable": [{ "key": "id", "value": "uuid-here" }]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "drivers",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "uuid-here"
+                }
+              ]
             }
           }
         },
@@ -323,8 +516,14 @@
           "request": {
             "method": "PATCH",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -332,9 +531,19 @@
             },
             "url": {
               "raw": "{{baseUrl}}/drivers/:id",
-              "host": ["{{baseUrl}}"],
-              "path": ["drivers", ":id"],
-              "variable": [{ "key": "id", "value": "uuid-here" }]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "drivers",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "uuid-here"
+                }
+              ]
             }
           }
         },
@@ -343,13 +552,26 @@
           "request": {
             "method": "DELETE",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
             ],
             "url": {
               "raw": "{{baseUrl}}/drivers/:id",
-              "host": ["{{baseUrl}}"],
-              "path": ["drivers", ":id"],
-              "variable": [{ "key": "id", "value": "uuid-here" }]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "drivers",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "uuid-here"
+                }
+              ]
             }
           }
         }
@@ -364,18 +586,43 @@
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
             ],
             "url": {
               "raw": "{{baseUrl}}/vehicles?page=1&limit=10",
-              "host": ["{{baseUrl}}"],
-              "path": ["vehicles"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "vehicles"
+              ],
               "query": [
-                { "key": "page", "value": "1" },
-                { "key": "limit", "value": "10" },
-                { "key": "status", "value": "", "disabled": true },
-                { "key": "category", "value": "", "disabled": true },
-                { "key": "search", "value": "", "disabled": true }
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "key": "status",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "category",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "search",
+                  "value": "",
+                  "disabled": true
+                }
               ]
             }
           }
@@ -385,8 +632,14 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -394,8 +647,12 @@
             },
             "url": {
               "raw": "{{baseUrl}}/vehicles",
-              "host": ["{{baseUrl}}"],
-              "path": ["vehicles"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "vehicles"
+              ]
             }
           }
         },
@@ -404,13 +661,26 @@
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
             ],
             "url": {
               "raw": "{{baseUrl}}/vehicles/:id",
-              "host": ["{{baseUrl}}"],
-              "path": ["vehicles", ":id"],
-              "variable": [{ "key": "id", "value": "uuid-here" }]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "vehicles",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "uuid-here"
+                }
+              ]
             }
           }
         },
@@ -419,8 +689,14 @@
           "request": {
             "method": "PATCH",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -428,9 +704,19 @@
             },
             "url": {
               "raw": "{{baseUrl}}/vehicles/:id",
-              "host": ["{{baseUrl}}"],
-              "path": ["vehicles", ":id"],
-              "variable": [{ "key": "id", "value": "uuid-here" }]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "vehicles",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "uuid-here"
+                }
+              ]
             }
           }
         },
@@ -439,13 +725,26 @@
           "request": {
             "method": "DELETE",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
             ],
             "url": {
               "raw": "{{baseUrl}}/vehicles/:id",
-              "host": ["{{baseUrl}}"],
-              "path": ["vehicles", ":id"],
-              "variable": [{ "key": "id", "value": "uuid-here" }]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "vehicles",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "uuid-here"
+                }
+              ]
             }
           }
         },
@@ -454,8 +753,14 @@
           "request": {
             "method": "PATCH",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -463,9 +768,20 @@
             },
             "url": {
               "raw": "{{baseUrl}}/vehicles/:id/assign",
-              "host": ["{{baseUrl}}"],
-              "path": ["vehicles", ":id", "assign"],
-              "variable": [{ "key": "id", "value": "vehicle-uuid-here" }]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "vehicles",
+                ":id",
+                "assign"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "vehicle-uuid-here"
+                }
+              ]
             }
           }
         }
@@ -480,13 +796,27 @@
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
             ],
             "url": {
               "raw": "{{baseUrl}}/vehicles/:vehicleId/maintenance",
-              "host": ["{{baseUrl}}"],
-              "path": ["vehicles", ":vehicleId", "maintenance"],
-              "variable": [{ "key": "vehicleId", "value": "vehicle-uuid-here" }]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "vehicles",
+                ":vehicleId",
+                "maintenance"
+              ],
+              "variable": [
+                {
+                  "key": "vehicleId",
+                  "value": "vehicle-uuid-here"
+                }
+              ]
             }
           }
         },
@@ -495,8 +825,14 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -504,9 +840,20 @@
             },
             "url": {
               "raw": "{{baseUrl}}/vehicles/:vehicleId/maintenance",
-              "host": ["{{baseUrl}}"],
-              "path": ["vehicles", ":vehicleId", "maintenance"],
-              "variable": [{ "key": "vehicleId", "value": "vehicle-uuid-here" }]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "vehicles",
+                ":vehicleId",
+                "maintenance"
+              ],
+              "variable": [
+                {
+                  "key": "vehicleId",
+                  "value": "vehicle-uuid-here"
+                }
+              ]
             }
           }
         },
@@ -515,15 +862,31 @@
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
             ],
             "url": {
               "raw": "{{baseUrl}}/vehicles/:vehicleId/maintenance/:id",
-              "host": ["{{baseUrl}}"],
-              "path": ["vehicles", ":vehicleId", "maintenance", ":id"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "vehicles",
+                ":vehicleId",
+                "maintenance",
+                ":id"
+              ],
               "variable": [
-                { "key": "vehicleId", "value": "vehicle-uuid-here" },
-                { "key": "id", "value": "record-uuid-here" }
+                {
+                  "key": "vehicleId",
+                  "value": "vehicle-uuid-here"
+                },
+                {
+                  "key": "id",
+                  "value": "record-uuid-here"
+                }
               ]
             }
           }
@@ -533,8 +896,14 @@
           "request": {
             "method": "PATCH",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -542,11 +911,24 @@
             },
             "url": {
               "raw": "{{baseUrl}}/vehicles/:vehicleId/maintenance/:id",
-              "host": ["{{baseUrl}}"],
-              "path": ["vehicles", ":vehicleId", "maintenance", ":id"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "vehicles",
+                ":vehicleId",
+                "maintenance",
+                ":id"
+              ],
               "variable": [
-                { "key": "vehicleId", "value": "vehicle-uuid-here" },
-                { "key": "id", "value": "record-uuid-here" }
+                {
+                  "key": "vehicleId",
+                  "value": "vehicle-uuid-here"
+                },
+                {
+                  "key": "id",
+                  "value": "record-uuid-here"
+                }
               ]
             }
           }
@@ -556,15 +938,31 @@
           "request": {
             "method": "DELETE",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
             ],
             "url": {
               "raw": "{{baseUrl}}/vehicles/:vehicleId/maintenance/:id",
-              "host": ["{{baseUrl}}"],
-              "path": ["vehicles", ":vehicleId", "maintenance", ":id"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "vehicles",
+                ":vehicleId",
+                "maintenance",
+                ":id"
+              ],
               "variable": [
-                { "key": "vehicleId", "value": "vehicle-uuid-here" },
-                { "key": "id", "value": "record-uuid-here" }
+                {
+                  "key": "vehicleId",
+                  "value": "vehicle-uuid-here"
+                },
+                {
+                  "key": "id",
+                  "value": "record-uuid-here"
+                }
               ]
             }
           }
@@ -580,15 +978,28 @@
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
             ],
             "url": {
               "raw": "{{baseUrl}}/bookings?page=1&limit=10",
-              "host": ["{{baseUrl}}"],
-              "path": ["bookings"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "bookings"
+              ],
               "query": [
-                { "key": "page", "value": "1" },
-                { "key": "limit", "value": "10" }
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
               ]
             }
           }
@@ -598,8 +1009,14 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -607,8 +1024,12 @@
             },
             "url": {
               "raw": "{{baseUrl}}/bookings",
-              "host": ["{{baseUrl}}"],
-              "path": ["bookings"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "bookings"
+              ]
             }
           }
         },
@@ -617,13 +1038,26 @@
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
             ],
             "url": {
               "raw": "{{baseUrl}}/bookings/:id",
-              "host": ["{{baseUrl}}"],
-              "path": ["bookings", ":id"],
-              "variable": [{ "key": "id", "value": "uuid-here" }]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "bookings",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "uuid-here"
+                }
+              ]
             }
           }
         },
@@ -632,8 +1066,14 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -641,9 +1081,20 @@
             },
             "url": {
               "raw": "{{baseUrl}}/bookings/:id/assign",
-              "host": ["{{baseUrl}}"],
-              "path": ["bookings", ":id", "assign"],
-              "variable": [{ "key": "id", "value": "uuid-here" }]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "bookings",
+                ":id",
+                "assign"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "uuid-here"
+                }
+              ]
             }
           }
         },
@@ -652,8 +1103,14 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -661,9 +1118,20 @@
             },
             "url": {
               "raw": "{{baseUrl}}/bookings/:id/status",
-              "host": ["{{baseUrl}}"],
-              "path": ["bookings", ":id", "status"],
-              "variable": [{ "key": "id", "value": "uuid-here" }]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "bookings",
+                ":id",
+                "status"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "uuid-here"
+                }
+              ]
             }
           }
         },
@@ -672,7 +1140,10 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -680,9 +1151,20 @@
             },
             "url": {
               "raw": "{{baseUrl}}/bookings/:id/cancel",
-              "host": ["{{baseUrl}}"],
-              "path": ["bookings", ":id", "cancel"],
-              "variable": [{ "key": "id", "value": "uuid-here" }]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "bookings",
+                ":id",
+                "cancel"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "uuid-here"
+                }
+              ]
             }
           }
         }
@@ -697,8 +1179,14 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -706,9 +1194,20 @@
             },
             "url": {
               "raw": "{{baseUrl}}/bookings/:bookingId/payments",
-              "host": ["{{baseUrl}}"],
-              "path": ["bookings", ":bookingId", "payments"],
-              "variable": [{ "key": "bookingId", "value": "booking-uuid-here" }]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "bookings",
+                ":bookingId",
+                "payments"
+              ],
+              "variable": [
+                {
+                  "key": "bookingId",
+                  "value": "booking-uuid-here"
+                }
+              ]
             }
           }
         },
@@ -717,17 +1216,37 @@
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
             ],
             "url": {
               "raw": "{{baseUrl}}/bookings/:bookingId/payments?page=1&limit=10",
-              "host": ["{{baseUrl}}"],
-              "path": ["bookings", ":bookingId", "payments"],
-              "query": [
-                { "key": "page", "value": "1" },
-                { "key": "limit", "value": "10" }
+              "host": [
+                "{{baseUrl}}"
               ],
-              "variable": [{ "key": "bookingId", "value": "booking-uuid-here" }]
+              "path": [
+                "bookings",
+                ":bookingId",
+                "payments"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ],
+              "variable": [
+                {
+                  "key": "bookingId",
+                  "value": "booking-uuid-here"
+                }
+              ]
             }
           }
         },
@@ -736,13 +1255,410 @@
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
             ],
             "url": {
               "raw": "{{baseUrl}}/payments/:id",
-              "host": ["{{baseUrl}}"],
-              "path": ["payments", ":id"],
-              "variable": [{ "key": "id", "value": "payment-uuid-here" }]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "payments",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "payment-uuid-here"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Dashboard",
+      "item": [
+        {
+          "name": "Get Stats",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/dashboard/stats?dateRange=today",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "dashboard",
+                "stats"
+              ],
+              "query": [
+                {
+                  "key": "dateRange",
+                  "value": "today"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Revenue Chart",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/dashboard/revenue?dateRange=month",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "dashboard",
+                "revenue"
+              ],
+              "query": [
+                {
+                  "key": "dateRange",
+                  "value": "month"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Status Breakdown",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/dashboard/status-breakdown",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "dashboard",
+                "status-breakdown"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Unassigned Bookings",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/dashboard/unassigned?page=1&limit=10",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "dashboard",
+                "unassigned"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Upcoming Trips",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/dashboard/upcoming-trips?page=1&limit=10",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "dashboard",
+                "upcoming-trips"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Fleet Summary",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/dashboard/fleet-summary",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "dashboard",
+                "fleet-summary"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Driver Summary",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/dashboard/driver-summary",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "dashboard",
+                "driver-summary"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Reports",
+      "item": [
+        {
+          "name": "Revenue Report",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/reports/revenue?dateRange=month",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "reports",
+                "revenue"
+              ],
+              "query": [
+                {
+                  "key": "dateRange",
+                  "value": "month"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Routes Report",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/reports/routes?dateRange=month",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "reports",
+                "routes"
+              ],
+              "query": [
+                {
+                  "key": "dateRange",
+                  "value": "month"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Drivers Report",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/reports/drivers?dateRange=month",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "reports",
+                "drivers"
+              ],
+              "query": [
+                {
+                  "key": "dateRange",
+                  "value": "month"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Vehicles Report",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/reports/vehicles?dateRange=month",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "reports",
+                "vehicles"
+              ],
+              "query": [
+                {
+                  "key": "dateRange",
+                  "value": "month"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Cancellations Report",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/reports/cancellations",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "reports",
+                "cancellations"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Payments Report",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/reports/payments",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "reports",
+                "payments"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Export CSV",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/reports/export?type=revenue&dateRange=month",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "reports",
+                "export"
+              ],
+              "query": [
+                {
+                  "key": "type",
+                  "value": "revenue"
+                },
+                {
+                  "key": "dateRange",
+                  "value": "month"
+                }
+              ]
             }
           }
         }

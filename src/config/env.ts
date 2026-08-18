@@ -14,6 +14,7 @@ const envSchema = z.object({
   BCRYPT_ROUNDS: z.coerce.number().default(12),
   SUPER_ADMIN_EMAIL: z.string().email("SUPER_ADMIN_EMAIL is required for seeding"),
   SUPER_ADMIN_PASSWORD: z.string().min(8, "SUPER_ADMIN_PASSWORD is required for seeding"),
+  BUSINESS_TIMEZONE: z.string().default("Asia/Kolkata"),
 });
 
 const _env = envSchema.safeParse(process.env);
